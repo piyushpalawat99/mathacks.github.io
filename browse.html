@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -7,26 +6,40 @@
   <title>Browse Attempts – Mathacks</title>
   <link rel="icon" href="favicon.ico" />
   <link rel="stylesheet" href="style.css" />
+  <style>
+    .airtable-embed {
+      width: 100%;
+      height: 800px;
+      border: none;
+    }
+  </style>
 </head>
 <body>
-  <header>
+  <header style="display:flex;justify-content:space-between;align-items:center;padding:1.25rem 2rem;">
     <img src="assets/logo.png" class="logo" alt="logo">
-    <nav>
+    <button class="menu-toggle" id="menu-toggle">☰</button>
+    <nav id="nav">
       <a href="index.html">Home</a>
       <a href="submit.html">Submit</a>
       <a href="browse.html">Browse</a>
       <a href="about.html">About</a>
+      <a href="https://github.com/piyushpalawat99/piyushpalawat99.github.io" target="_blank">Contribute</a>
     </nav>
     <button id="toggle-theme">🌓</button>
   </header>
+
   <main>
     <h1>Browse Attempts</h1>
-    <iframe src="https://egw9wj7g2gxkpg0.embednotionpage.com/?source=copy_link"></iframe>
+    <iframe class="airtable-embed"
+      src="https://airtable.com/embed/shrtpUYiGGFA4U5Fj?backgroundColor=gray&viewControls=on"
+      frameborder="0" onmousewheel=""></iframe>
   </main>
+
   <footer>
     © 2025 Mathacks. Built by Piyush Palawat.<br />
     <a href="https://github.com/piyushpalawat99/piyushpalawat99.github.io" target="_blank" style="color:inherit;text-decoration:underline;">Open source – contribute on GitHub</a>
   </footer>
+
   <script>
     const t = document.getElementById('toggle-theme');
     const b = document.body;
@@ -35,6 +48,12 @@
       b.classList.toggle('dark');
       localStorage.theme = b.classList.contains('dark') ? 'dark' : 'light';
     };
+
+    const menuToggle = document.getElementById('menu-toggle');
+    const nav = document.getElementById('nav');
+    menuToggle.addEventListener('click', () => {
+      nav.classList.toggle('active');
+    });
   </script>
 </body>
 </html>
