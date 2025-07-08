@@ -3,35 +3,26 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Mathacks – Documenting Failed Research</title>
+  <title>Mathacks</title>
+  <link rel="icon" href="favicon.ico" />
   <link rel="stylesheet" href="style.css" />
-  <link rel="icon" type="image/x-icon" href="favicon.ico" />
 </head>
 <body>
-  <button id="toggle-theme" style="position:absolute;top:1rem;right:1rem;">🌙</button>
-
+  <button id="toggle-theme" style="position:absolute;top:1rem;right:1rem;">🌓</button>
   <main>
-    <img src="assets/logo.png" alt="Mathacks Logo" class="logo-full">
-    <h1>Failures Worth Learning From</h1>
-    <p>Most ideas in research don't work. But those missteps — the ones not written up, not published, not rewarded — are just as important. Mathacks is a place to share the experiments, proofs, and theories that didn’t make it. So others can learn, pivot, or even finish what you started.</p>
-    <p>
-      <a href="submit.html">Share an Attempt</a> |
-      <a href="browse.html">Browse Attempts</a>
-    </p>
+    <img src="assets/logo.png" alt="Mathacks Logo" class="logo-large">
+    <h1 style="font-weight:600;">Failures Worth Learning From</h1>
+    <p>Documenting failed or incomplete research attempts in science and math—because learning from what doesn't work is just as valuable as what does.</p>
+    <p><a href="submit.html">Submit a Failed Attempt</a> · <a href="browse.html">Browse Submissions</a></p>
   </main>
-
-  <footer>
-    Built with ❤️ by Piyush Palawat
-  </footer>
-
+  <footer>© 2025 Mathacks. Built by Piyush Palawat.</footer>
   <script>
-    const toggle = document.getElementById('toggle-theme');
-    const body = document.body;
-    const stored = localStorage.getItem('theme');
-    if (stored === 'dark') body.classList.add('dark');
-    toggle.onclick = () => {
-      body.classList.toggle('dark');
-      localStorage.setItem('theme', body.classList.contains('dark') ? 'dark' : 'light');
+    const t = document.getElementById('toggle-theme');
+    const b = document.body;
+    if (localStorage.theme === 'dark') b.classList.add('dark');
+    t.onclick = () => {
+      b.classList.toggle('dark');
+      localStorage.theme = b.classList.contains('dark') ? 'dark' : 'light';
     };
   </script>
 </body>

@@ -2,41 +2,35 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Browse Attempts – Mathacks</title>
-  <link rel="stylesheet" href="style.css">
-  <link rel="icon" type="image/x-icon" href="favicon.ico" />
+  <link rel="icon" href="favicon.ico" />
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
   <header>
-    <img src="assets/logo.png" alt="Logo" class="logo-icon">
+    <img src="assets/logo.png" class="logo" alt="logo">
     <nav>
       <a href="index.html">Home</a>
       <a href="submit.html">Submit</a>
       <a href="browse.html">Browse</a>
       <a href="about.html">About</a>
     </nav>
-    <button id="toggle-theme">🌙</button>
+    <button id="toggle-theme">🌓</button>
   </header>
-
   <main>
     <h1>Browse Attempts</h1>
-    <iframe src="https://egw9wj7g2gxkpg0.embednotionpage.com/?source=copy_link" style="width:100%;height:700px;border:none;"></iframe>
+    <iframe src="https://egw9wj7g2gxkpg0.embednotionpage.com/?source=copy_link"></iframe>
   </main>
-
-  <footer>
-    Built with ❤️ by Piyush Palawat
-  </footer>
-
+  <footer>© 2025 Mathacks. Built by Piyush Palawat.</footer>
   <script>
-    const toggle = document.getElementById('toggle-theme');
-    const body = document.body;
-    const stored = localStorage.getItem('theme');
-    if (stored === 'dark') body.classList.add('dark');
-    toggle.onclick = () => {
-      body.classList.toggle('dark');
-      localStorage.setItem('theme', body.classList.contains('dark') ? 'dark' : 'light');
+    const t = document.getElementById('toggle-theme');
+    const b = document.body;
+    if (localStorage.theme === 'dark') b.classList.add('dark');
+    t.onclick = () => {
+      b.classList.toggle('dark');
+      localStorage.theme = b.classList.contains('dark') ? 'dark' : 'light';
     };
   </script>
 </body>
