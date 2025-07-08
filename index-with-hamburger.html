@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Mathacks</title>
+  <link rel="icon" href="favicon.ico" />
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    .menu-toggle {
+      display: none;
+      background: none;
+      border: none;
+      font-size: 1.5rem;
+      cursor: pointer;
+    }
+    nav {
+      display: flex;
+      gap: 1.5rem;
+      align-items: center;
+    }
+    @media (max-width: 640px) {
+      nav {
+        display: none;
+        flex-direction: column;
+        align-items: flex-start;
+        padding-top: 1rem;
+      }
+      nav.active {
+        display: flex;
+      }
+      .menu-toggle {
+        display: block;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header style="display:flex;justify-content:space-between;align-items:center;padding:1.25rem 2rem;">
+    <img src="assets/logo.png" class="logo" alt="Mathacks Logo">
+    <button class="menu-toggle" id="menu-toggle">☰</button>
+    <nav id="nav">
+      <a href="index.html">Home</a>
+      <a href="submit.html">Submit</a>
+      <a href="browse.html">Browse</a>
+      <a href="about.html">About</a>
+      <a href="https://github.com/piyushpalawat99/piyushpalawat99.github.io" target="_blank">Contribute</a>
+    </nav>
+    <button id="toggle-theme">🌓</button>
+  </header>
+
+  <main>
+    <img src="assets/logo.png" alt="Mathacks Logo" class="logo-large">
+    <h1 style="font-weight:600;">Failures Worth Learning From</h1>
+    <p>Documenting failed or incomplete research attempts in science and math—because learning from what doesn't work is just as valuable as what does.</p>
+    <p><a href="submit.html">Submit a Failed Attempt</a> · <a href="browse.html">Browse Submissions</a></p>
+  </main>
+
+  <footer>
+    © 2025 Mathacks. Built by Piyush Palawat.<br />
+    <a href="https://github.com/piyushpalawat99/piyushpalawat99.github.io" target="_blank" style="color:inherit;text-decoration:underline;">Open source – contribute on GitHub</a>
+  </footer>
+
+  <script>
+    const t = document.getElementById('toggle-theme');
+    const b = document.body;
+    if (localStorage.theme === 'dark') b.classList.add('dark');
+    t.onclick = () => {
+      b.classList.toggle('dark');
+      localStorage.theme = b.classList.contains('dark') ? 'dark' : 'light';
+    };
+
+    const menuToggle = document.getElementById('menu-toggle');
+    const nav = document.getElementById('nav');
+    menuToggle.addEventListener('click', () => {
+      nav.classList.toggle('active');
+    });
+  </script>
+</body>
+</html>
