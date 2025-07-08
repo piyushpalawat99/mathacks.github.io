@@ -20,11 +20,16 @@ header {
   position: sticky;
   top: 0;
 }
-.logo {
-  height: 40px;
+.logo-icon {
+  height: 36px;
+}
+.logo-full {
+  display: block;
+  max-width: 240px;
+  margin: 3rem auto 1rem auto;
 }
 nav a {
-  margin: 0 1rem;
+  margin: 0 0.75rem;
   text-decoration: none;
   color: inherit;
 }
@@ -35,13 +40,22 @@ nav a {
   cursor: pointer;
 }
 main {
-  padding: 3rem 2rem;
+  padding: 2rem;
   max-width: 700px;
   margin: auto;
+  text-align: center;
 }
 footer {
   text-align: center;
   padding: 2rem;
   font-size: 0.9rem;
   opacity: 0.7;
+}
+@media (max-width: 600px) {
+  .logo-full {
+    max-width: 180px;
+  }
+  nav a {
+    margin: 0 0.5rem;
+  }
 }
