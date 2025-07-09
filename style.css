@@ -93,6 +93,9 @@ form {
   display: flex;
   flex-direction: column;
   gap: 1.2rem;
+  max-width: 600px;
+  margin: 2rem auto;
+  padding: 1rem;
 }
 
 .form-group {
@@ -128,6 +131,12 @@ button {
 button:hover {
   background-color: #222;
 }
+
+#form-status {
+  color: red;
+  margin-top: 0.5rem;
+}
+
 
 @media (max-width: 600px) {
   nav a { margin-left: 1rem; }
