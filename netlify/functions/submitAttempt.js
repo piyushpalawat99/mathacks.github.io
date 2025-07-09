@@ -1,59 +1,47 @@
 
-const Airtable = require('airtable');
-const formidable = require('formidable');
-const cloudinary = require('cloudinary').v2;
-const fs = require('fs');
+const { Octokit } = require('@octokit/core');
+const { v4: uuidv4 } = require('uuid');
 
-cloudinary.config({
-  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
-  api_key: process.env.CLOUDINARY_API_KEY,
-  api_secret: process.env.CLOUDINARY_API_SECRET
-});
-
-const base = new Airtable({ apiKey: process.env.AIRTABLE_API_KEY }).base(process.env.AIRTABLE_BASE_ID);
-
-exports.handler = async (event, context) => {
+exports.handler = async function(event, context) {
   if (event.httpMethod !== 'POST') {
     return { statusCode: 405, body: 'Method Not Allowed' };
   }
 
-  const form = new formidable.IncomingForm({ multiples: false, keepExtensions: true });
+  const token = process.env.GITHUB_TOKEN;
+  const octokit = new Octokit({ auth: token });
 
-  return new Promise((resolve, reject) => {
-    form.parse(event, async (err, fields, files) => {
-      if (err) {
-        console.error('Form parse error:', err);
-        return resolve({ statusCode: 400, body: JSON.stringify({ message: 'Invalid form data' }) });
-      }
+  const repoOwner = 'piyushpalawat99';
+  const repoName = 'piyushpalawat99.github.io';
+  const submissionsPath = '_submissions'; // Make sure this folder exists in your repo
 
-      try {
-        let fileUrl = '';
-        if (files.file && files.file.filepath) {
-          const result = await cloudinary.uploader.upload(files.file.filepath, {
-            folder: 'mathacks_uploads'
-          });
-          fileUrl = result.secure_url;
-        }
+  try {
+    const formData = JSON.parse(event.body);
 
-        await base('Submissions').create({
-          Title: fields.title,
-          Description: fields.description,
-          Field: fields.field,
-          File: fileUrl,
-          Status: 'pending'
-        });
+    const fileName = `attempt-${Date.now()}.json`;
+    const fileContent = Buffer.from(JSON.stringify({
+      title: formData.title,
+      description: formData.description,
+      field: formData.field,
+      submitted_at: new Date().toISOString()
+    }, null, 2)).toString('base64');
 
-        resolve({
-          statusCode: 200,
-          body: JSON.stringify({ message: 'Submission received' })
-        });
-      } catch (error) {
-        console.error('Submission error:', error);
-        resolve({
-          statusCode: 500,
-          body: JSON.stringify({ message: 'Internal server error' })
-        });
-      }
+    const response = await octokit.request('PUT /repos/{owner}/{repo}/contents/{path}', {
+      owner: repoOwner,
+      repo: repoName,
+      path: `${submissionsPath}/${fileName}`,
+      message: `New submission: ${formData.title}`,
+      content: fileContent
     });
-  });
+
+    return {
+      statusCode: 200,
+      body: JSON.stringify({ message: 'Submission saved to GitHub' })
+    };
+  } catch (err) {
+    console.error('GitHub API Error:', err);
+    return {
+      statusCode: 500,
+      body: JSON.stringify({ message: 'Failed to save submission.' })
+    };
+  }
 };

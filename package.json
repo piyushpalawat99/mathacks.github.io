@@ -2,8 +2,7 @@
   "name": "mathacks-functions",
   "version": "1.0.0",
   "dependencies": {
-    "airtable": "^0.11.5",
-    "cloudinary": "^1.37.2",
-    "formidable": "^2.1.1"
+    "@octokit/core": "^5.0.0",
+    "uuid": "^9.0.0"
   }
 }
