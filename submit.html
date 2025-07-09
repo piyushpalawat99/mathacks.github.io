@@ -2,88 +2,53 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Submit a Failed Attempt – Mathacks</title>
-  <link rel="icon" href="favicon.ico" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Submit an Attempt</title>
   <link rel="stylesheet" href="style.css" />
-  <style>
-    .menu-toggle {
-      display: none;
-      background: none;
-      border: none;
-      font-size: 1.5rem;
-      cursor: pointer;
-    }
-    nav {
-      display: flex;
-      gap: 1.5rem;
-      align-items: center;
-    }
-    @media (max-width: 640px) {
-      .menu-toggle {
-        display: block;
-      }
-      nav {
-        display: none;
-        flex-direction: column;
-        align-items: flex-start;
-        padding-top: 1rem;
-      }
-      nav.active {
-        display: flex;
-      }
-    }
-    iframe {
-      width: 100%;
-      height: 700px;
-      border: none;
-    }
-  </style>
 </head>
 <body>
-  <header class="header">
-    <div class="left">
-      <a href="index.html">
-        <img src="assets/logo/Horizontal.png" class="logo" alt="Mathacks Logo">
-      </a>
-    </div>
-    <div class="right">
-      <button class="menu-toggle" id="menu-toggle">☰</button>
-      <nav id="nav">
-        <a href="submit.html">Submit</a>
-        <a href="browse.html">Browse</a>
-        <a href="about.html">About</a>
-        <a href="https://github.com/piyushpalawat99/piyushpalawat99.github.io" target="_blank">Contribute</a>
-      </nav>
-      <button id="toggle-theme">🌓</button>
-    </div>
-  </header>
+  <main style="max-width: 600px; margin: 2rem auto; padding: 1rem;">
+    <h1>Submit an Attempt</h1>
+    <form id="submission-form" enctype="multipart/form-data">
+      <label>Title</label>
+      <input type="text" name="title" required />
 
-  <main>
-    <h1>Submit a Failed Attempt</h1>
-    <iframe src="https://noteforms.com/forms/failed-research-attempts-7c8nbn"></iframe>
+      <label>Description</label>
+      <textarea name="description" rows="6" required></textarea>
+
+      <label>Field</label>
+      <select name="field" required>
+        <option value="Math">Math</option>
+        <option value="Physics">Physics</option>
+        <option value="CS">Computer Science</option>
+        <option value="Other">Other</option>
+      </select>
+
+      <label>Upload File (optional)</label>
+      <input type="file" name="file" accept=".pdf,.zip,.jpg,.png,.txt" />
+
+      <button type="submit">Submit</button>
+    </form>
+    <p id="form-status"></p>
   </main>
 
-  <footer>
-    © 2025 Mathacks. Built by Piyush Palawat.<br />
-    <a href="https://github.com/piyushpalawat99/piyushpalawat99.github.io" target="_blank" style="color:inherit;text-decoration:underline;">
-      Open source – contribute on GitHub
-    </a>
-  </footer>
-
   <script>
-    const t = document.getElementById('toggle-theme');
-    const b = document.body;
-    if (localStorage.theme === 'dark') b.classList.add('dark');
-    t.onclick = () => {
-      b.classList.toggle('dark');
-      localStorage.theme = b.classList.contains('dark') ? 'dark' : 'light';
-    };
+    document.getElementById('submission-form').addEventListener('submit', async function (e) {
+      e.preventDefault();
+      const form = e.target;
+      const formData = new FormData(form);
 
-    const menuToggle = document.getElementById('menu-toggle');
-    const nav = document.getElementById('nav');
-    menuToggle.addEventListener('click', () => {
-      nav.classList.toggle('active');
+      const response = await fetch('/.netlify/functions/submitAttempt', {
+        method: 'POST',
+        body: formData
+      });
+
+      if (response.ok) {
+        window.location.href = 'confirmation.html';
+      } else {
+        const error = await response.json();
+        document.getElementById('form-status').innerText = error.message || 'Submission failed.';
+      }
     });
   </script>
 </body>
