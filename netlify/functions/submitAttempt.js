@@ -8,7 +8,7 @@ exports.handler = async (event) => {
 
   const AIRTABLE_API_KEY = process.env.AIRTABLE_API_KEY;
   const BASE_ID = 'appKrCFThGJ9SCt4X';
-  const TABLE_NAME = 'Mathacks Attempts';
+  const TABLE_NAME = 'Imported table';
 
   const submission = JSON.parse(event.body);
 
