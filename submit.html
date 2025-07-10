@@ -4,50 +4,39 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Submit an Attempt – Mathacks</title>
-  <link rel="stylesheet" href="styles.css" />
   <style>
-    main.container {
+    body {
+      font-family: sans-serif;
+      margin: 2rem;
+    }
+    main {
       max-width: 600px;
-      margin: 4rem auto;
-      padding: 2rem;
+      margin: auto;
     }
     form {
       display: flex;
       flex-direction: column;
-      gap: 1.5rem;
-    }
-    label {
-      display: flex;
-      flex-direction: column;
-      font-weight: bold;
+      gap: 1rem;
     }
     input, textarea {
       padding: 0.75rem;
       font-size: 1rem;
-      border-radius: 0.5rem;
+      border-radius: 6px;
       border: 1px solid #ccc;
-      margin-top: 0.5rem;
-    }
-    textarea {
-      resize: vertical;
-      min-height: 100px;
     }
     button {
+      padding: 0.75rem;
       background: black;
       color: white;
-      padding: 0.75rem;
       font-size: 1rem;
       border: none;
-      border-radius: 0.5rem;
+      border-radius: 6px;
       cursor: pointer;
-    }
-    button:hover {
-      background: #333;
     }
   </style>
 </head>
 <body>
-  <main class="container">
+  <main>
     <h1>Submit Your Failed Attempt</h1>
     <form id="attempt-form">
       <label>Title
@@ -75,11 +64,11 @@
       e.preventDefault();
 
       const data = {
-        title: form.title.value.trim(),
-        area: form.area.value.trim(),
-        summary: form.summary.value.trim(),
-        failure: form.failure.value.trim(),
-        author: form.author.value.trim(),
+        title: form.title.value,
+        area: form.area.value,
+        summary: form.summary.value,
+        failure: form.failure.value,
+        author: form.author.value,
         date: new Date().toISOString()
       };
 
@@ -97,7 +86,7 @@
           window.location.href = '/thanks.html';
         } else {
           console.error(result);
-          alert('❌ Submission failed: ' + (result.error || 'Unknown error'));
+          alert('❌ Failed to save submission.');
         }
       } catch (err) {
         console.error(err);
