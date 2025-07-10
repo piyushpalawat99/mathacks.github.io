@@ -2,161 +2,69 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Submit a Failed Attempt – Mathacks</title>
-  <link rel="icon" href="favicon.ico" />
-  <link rel="stylesheet" href="style.css" />
-  <style>
-    .menu-toggle {
-      display: none;
-      background: none;
-      border: none;
-      font-size: 1.5rem;
-      cursor: pointer;
-    }
-    nav {
-      display: flex;
-      gap: 1.5rem;
-      align-items: center;
-    }
-    @media (max-width: 640px) {
-      .menu-toggle {
-        display: block;
-      }
-      nav {
-        display: none;
-        flex-direction: column;
-        align-items: flex-start;
-        padding-top: 1rem;
-      }
-      nav.active {
-        display: flex;
-      }
-    }
-    iframe {
-      width: 100%;
-      height: 700px;
-      border: none;
-    }
-  </style>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Submit an Attempt – Mathacks</title>
+  <link rel="stylesheet" href="styles.css"/>
 </head>
 <body>
-  <header class="header">
-    <div class="left">
-      <a href="index.html">
-        <img src="assets/logo/Horizontal.png" class="logo" alt="Mathacks Logo">
-      </a>
-    </div>
-    <div class="right">
-      <button class="menu-toggle" id="menu-toggle">☰</button>
-      <nav id="nav">
-        <a href="submit.html">Submit</a>
-        <a href="browse.html">Browse</a>
-        <a href="about.html">About</a>
-        <a href="https://github.com/piyushpalawat99/piyushpalawat99.github.io" target="_blank">Contribute</a>
-      </nav>
-      <button id="toggle-theme">🌓</button>
-    </div>
-  </header>
-  <main style="max-width: 600px; margin: 2rem auto; padding: 1rem;">
-    <h1>Submit an Attempt</h1>
-      <form id="submission-form">
-        <div class="form-group">
-          <label for="title">Title</label>
-          <input type="text" name="title" id="title" required />
-        </div>
-      
-        <div class="form-group">
-          <label for="description">Description</label>
-          <textarea name="description" id="description" rows="6" required></textarea>
-        </div>
-      
-        <div class="form-group">
-          <label for="field">Field</label>
-          <select name="field" id="field" required>
-            <option value="Mathematics">Math</option>
-            <option value="Physics">Physics</option>
-            <option value="CS">Computer Science</option>
-            <option value="Other">Other</option>
-          </select>
-        </div>
-      
-        <div class="form-group">
-          <label for="file">Upload File (optional)</label>
-          <input type="file" name="file" id="file" accept=".pdf,.zip,.jpg,.png,.txt" />
-        </div>
-      
-        <button type="submit">Submit</button>
-        <p id="form-status"></p>
-      </form>
-
-    <p id="form-status"></p>
+  <main class="container">
+    <h1>Submit Your Failed Attempt</h1>
+    <form id="attempt-form">
+      <label>Title
+        <input type="text" name="title" required />
+      </label>
+      <label>Area of Research
+        <input type="text" name="area" required />
+      </label>
+      <label>Attempt Summary
+        <textarea name="summary" required></textarea>
+      </label>
+      <label>Why It Failed
+        <textarea name="failure" required></textarea>
+      </label>
+      <label>Author Name
+        <input type="text" name="author" required />
+      </label>
+      <button type="submit">Submit</button>
+    </form>
   </main>
 
-  
-<script>
-document.getElementById('submission-form').addEventListener('submit', async function (e) {
-  e.preventDefault();
+  <script>
+    const form = document.getElementById('attempt-form');
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
 
-  const form = e.target;
-  const data = {
-    title: form.title.value,
-    description: form.description.value,
-    field: form.field.value
-  };
-  const form = document.querySelector('form');
+      const data = {
+        title: form.title.value,
+        area: form.area.value,
+        summary: form.summary.value,
+        failure: form.failure.value,
+        author: form.author.value,
+        date: new Date().toISOString()
+      };
 
-  form.addEventListener('submit', async (e) => {
-    e.preventDefault();
-  
-    const data = {
-      title: form.title.value,
-      area: form.area.value,
-      summary: form.summary.value,
-      failure: form.failure.value,
-      author: form.author.value,
-      date: new Date().toISOString(), // optional
-    };
-  
-    try {
-      const res = await fetch('/.netlify/functions/submitAttempt', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(data),
-      });
-  
-      const result = await res.json();
-  
-      if (res.ok) {
-        alert('✅ Submission saved!');
-        window.location.href = '/thanks.html';
-      } else {
-        console.error(result);
-        alert('❌ Failed to save submission.');
+      try {
+        const res = await fetch('/.netlify/functions/submitAttempt', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(data)
+        });
+
+        const result = await res.json();
+        if (res.ok) {
+          alert('✅ Submission saved!');
+          window.location.href = '/thanks.html';
+        } else {
+          console.error(result);
+          alert('❌ Failed to save submission.');
+        }
+      } catch (err) {
+        console.error(err);
+        alert('❌ Submission error.');
       }
-    } catch (err) {
-      console.error(err);
-      alert('❌ Submission error.');
-    }
-  });
-
-
-  const response = await fetch('/.netlify/functions/submitAttempt', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify(data)
-  });
-
-  if (response.ok) {
-    window.location.href = 'confirmation.html';
-  } else {
-    const error = await response.json();
-    document.getElementById('form-status').innerText = error.message || 'Submission failed.';
-  }
-});
-</script>
-
+    });
+  </script>
 </body>
 </html>
