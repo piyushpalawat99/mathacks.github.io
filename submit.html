@@ -104,6 +104,42 @@ document.getElementById('submission-form').addEventListener('submit', async func
     description: form.description.value,
     field: form.field.value
   };
+  const form = document.querySelector('form');
+
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+  
+    const data = {
+      title: form.title.value,
+      area: form.area.value,
+      summary: form.summary.value,
+      failure: form.failure.value,
+      author: form.author.value,
+      date: new Date().toISOString(), // optional
+    };
+  
+    try {
+      const res = await fetch('/.netlify/functions/submitAttempt', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data),
+      });
+  
+      const result = await res.json();
+  
+      if (res.ok) {
+        alert('✅ Submission saved!');
+        window.location.href = '/thanks.html';
+      } else {
+        console.error(result);
+        alert('❌ Failed to save submission.');
+      }
+    } catch (err) {
+      console.error(err);
+      alert('❌ Submission error.');
+    }
+  });
+
 
   const response = await fetch('/.netlify/functions/submitAttempt', {
     method: 'POST',
