@@ -4,7 +4,47 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Submit an Attempt – Mathacks</title>
-  <link rel="stylesheet" href="styles.css"/>
+  <link rel="stylesheet" href="styles.css" />
+  <style>
+    main.container {
+      max-width: 600px;
+      margin: 4rem auto;
+      padding: 2rem;
+    }
+    form {
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+    label {
+      display: flex;
+      flex-direction: column;
+      font-weight: bold;
+    }
+    input, textarea {
+      padding: 0.75rem;
+      font-size: 1rem;
+      border-radius: 0.5rem;
+      border: 1px solid #ccc;
+      margin-top: 0.5rem;
+    }
+    textarea {
+      resize: vertical;
+      min-height: 100px;
+    }
+    button {
+      background: black;
+      color: white;
+      padding: 0.75rem;
+      font-size: 1rem;
+      border: none;
+      border-radius: 0.5rem;
+      cursor: pointer;
+    }
+    button:hover {
+      background: #333;
+    }
+  </style>
 </head>
 <body>
   <main class="container">
@@ -35,11 +75,11 @@
       e.preventDefault();
 
       const data = {
-        title: form.title.value,
-        area: form.area.value,
-        summary: form.summary.value,
-        failure: form.failure.value,
-        author: form.author.value,
+        title: form.title.value.trim(),
+        area: form.area.value.trim(),
+        summary: form.summary.value.trim(),
+        failure: form.failure.value.trim(),
+        author: form.author.value.trim(),
         date: new Date().toISOString()
       };
 
@@ -54,11 +94,10 @@
 
         const result = await res.json();
         if (res.ok) {
-          alert('✅ Submission saved!');
           window.location.href = '/thanks.html';
         } else {
           console.error(result);
-          alert('❌ Failed to save submission.');
+          alert('❌ Submission failed: ' + (result.error || 'Unknown error'));
         }
       } catch (err) {
         console.error(err);
