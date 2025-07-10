@@ -1,68 +1,58 @@
-const { Octokit } = require('@octokit/core');
-const { v4: uuidv4 } = require('uuid');
+const fetch = require('node-fetch');
 
-exports.handler = async function(event, context) {
+exports.handler = async (event) => {
   if (event.httpMethod !== 'POST') {
-    return { statusCode: 405, body: 'Method Not Allowed' };
+    return {
+      statusCode: 405,
+      body: 'Method Not Allowed',
+    };
   }
 
-  const token = process.env.GITHUB_TOKEN;
-  const octokit = new Octokit({ auth: token });
+  const AIRTABLE_API_KEY = process.env.AIRTABLE_API_KEY;
+  const BASE_ID = 'appKrCFThGJ9SCt4X';
+  const TABLE_NAME = 'Mathacks Attempts';
 
-  const repoOwner = 'piyushpalawat99';
-  const repoName = 'piyushpalawat99.github.io';
-  const submissionsPath = '_submissions';
+  const submission = JSON.parse(event.body);
 
   try {
-    // Parse incoming JSON
-    const formData = JSON.parse(event.body);
-    console.log("✅ Parsed data:", formData);
+    const airtableResponse = await fetch(`https://api.airtable.com/v0/${BASE_ID}/${encodeURIComponent(TABLE_NAME)}`, {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${AIRTABLE_API_KEY}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        fields: {
+          'Title': submission.title,
+          'Area of Research': submission.area,
+          'Attempt Summary': submission.summary,
+          'Why It Failed': submission.failure,
+          'Author Name': submission.author,
+          'Date': submission.date || new Date().toISOString(),
+        },
+      }),
+    });
 
-    // Optional: Check if the submissions folder exists
-    try {
-      const folderCheck = await octokit.request('GET /repos/{owner}/{repo}/contents/{path}', {
-        owner: repoOwner,
-        repo: repoName,
-        path: submissionsPath
-      });
-      console.log("📁 _submissions folder found. Contains:", folderCheck.data.length, "items");
-    } catch (folderErr) {
-      console.error("❌ _submissions folder NOT found!");
+    const data = await airtableResponse.json();
+
+    if (!airtableResponse.ok) {
+      console.error('Airtable error:', data);
       return {
-        statusCode: 404,
-        body: JSON.stringify({ message: "_submissions folder missing in repo root." })
+        statusCode: airtableResponse.status,
+        body: JSON.stringify({ error: 'Failed to save to Airtable' }),
       };
     }
 
-    // Prepare file content
-    const fileName = `attempt-${Date.now()}.json`;
-    const fileContent = Buffer.from(JSON.stringify({
-      title: formData.title,
-      description: formData.description,
-      field: formData.field,
-      submitted_at: new Date().toISOString()
-    }, null, 2)).toString('base64');
-
-    // Write file to GitHub
-    const response = await octokit.request('PUT /repos/{owner}/{repo}/contents/{path}', {
-      owner: repoOwner,
-      repo: repoName,
-      path: `${submissionsPath}/${fileName}`,
-      message: `New submission: ${formData.title}`,
-      content: fileContent,
-      branch: 'main'
-    });
-
-    console.log("✅ Submission committed to GitHub:", response.status);
     return {
       statusCode: 200,
-      body: JSON.stringify({ message: 'Submission saved to GitHub' })
+      headers: { 'Access-Control-Allow-Origin': '*' },
+      body: JSON.stringify({ success: true, id: data.id }),
     };
-  } catch (err) {
-    console.error('❌ GitHub API Error:', err);
+  } catch (error) {
+    console.error('Server error:', error);
     return {
       statusCode: 500,
-      body: JSON.stringify({ message: 'Failed to save submission.' })
+      body: JSON.stringify({ error: 'Server error' }),
     };
   }
 };
