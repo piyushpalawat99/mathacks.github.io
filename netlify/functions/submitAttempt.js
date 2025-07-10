@@ -49,7 +49,8 @@ exports.handler = async function(event, context) {
       repo: repoName,
       path: `${submissionsPath}/${fileName}`,
       message: `New submission: ${formData.title}`,
-      content: fileContent
+      content: fileContent,
+      branch: 'main'
     });
 
     console.log("✅ Submission committed to GitHub:", response.status);
