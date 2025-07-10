@@ -1,3 +1,5 @@
+const folderCheck = await octokit.request('GET /repos/piyushpalawat99/piyushpalawat99.github.io/contents/_submissions');
+console.log("✅ Folder contents:", folderCheck.data);
 exports.handler = async (event) => {
   console.log("👉 Event body:", event.body);
   let data;
