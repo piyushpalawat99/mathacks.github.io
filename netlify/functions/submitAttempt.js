@@ -1,3 +1,25 @@
+exports.handler = async (event) => {
+  console.log("👉 Event body:", event.body);
+  let data;
+  try {
+    data = JSON.parse(event.body);
+    console.log("✅ Parsed JSON:", data);
+  } catch (err) {
+    console.error("❌ JSON parse error:", err);
+    return { statusCode: 400, body: JSON.stringify({ message: "Invalid JSON" }) };
+  }
+
+  try {
+    // Your save logic
+    console.log("🔄 Attempting to save submission for:", data.title);
+    // (e.g., write to file, DB, etc.)
+    console.log("✅ Submission saved successfully");
+    return { statusCode: 200, body: JSON.stringify({ message: "OK" }) };
+  } catch (err) {
+    console.error("❌ Save error:", err);
+    return { statusCode: 500, body: JSON.stringify({ message: "Failed to save submission" }) };
+  }
+};
 
 const { Octokit } = require('@octokit/core');
 const { v4: uuidv4 } = require('uuid');
