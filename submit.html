@@ -97,12 +97,34 @@
     document.getElementById('submission-form').addEventListener('submit', async function (e) {
       e.preventDefault();
       const form = e.target;
-      const formData = new FormData(form);
+      <script>
+        document.getElementById('submission-form').addEventListener('submit', async function (e) {
+          e.preventDefault();
+      
+          const form = e.target;
+          const data = {
+            title: form.title.value,
+            description: form.description.value,
+            field: form.field.value
+          };
+      
+          const response = await fetch('/.netlify/functions/submitAttempt', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data)
+          });
+      
+          if (response.ok) {
+            window.location.href = 'confirmation.html';
+          } else {
+            const error = await response.json();
+            document.getElementById('form-status').innerText = error.message || 'Submission failed.';
+          }
+        });
+      </script>
 
-      const response = await fetch('/.netlify/functions/submitAttempt', {
-        method: 'POST',
-        body: formData
-      });
 
       if (response.ok) {
         window.location.href = 'confirmation.html';
