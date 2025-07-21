@@ -5,14 +5,81 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Submit an Attempt – Mathacks</title>
   <style>
+    :root{
+      --color-link: #0070f3;
+    }
+
+    body.dark {
+      --color-bg: #121212;
+      --color-fg: #e0e0e0;
+      --color-muted: #999;
+      --color-link: #4ea1f3;
+    }
     body {
       font-family: sans-serif;
-      margin: 2rem;
+      margin: 0;
+      background: var(--color-bg);
+      color: var(--color-fg);
+      
     }
     main {
       max-width: 600px;
       margin: auto;
+      
     }
+    /*CSS Styling for NavBar*/
+    header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1.25rem 2rem;
+    }
+   .header .left {
+      flex-shrink: 0;
+    }
+
+   .header .right {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1.5rem;
+    }
+   .logo {
+      height: 32px;
+    }
+   .logo-large {
+     display: block;
+     max-width: 200px;
+     margin: 3rem auto 2rem auto;
+    }
+   button#toggle-theme {
+     background: none;
+     border: none;
+     font-size: 1rem;
+     cursor: pointer;
+    }
+   button#menu-toggle {
+     background: none;
+     border: none;
+     font-size: 1rem;
+     cursor: pointer;
+    }
+   #nav{
+     display: flex;
+     flex-direction: row;
+     justify-content: space-between;
+     gap: 1.5rem;
+    }
+   nav a {
+     text-decoration: none;
+     color: var(--color-fg);
+     margin-left: 1.5rem;
+     font-size: 0.95rem;
+    }
+   nav a:hover {
+     color: var(--color-link);
+    }
+
     form {
       display: flex;
       flex-direction: column;
@@ -33,9 +100,29 @@
       border-radius: 6px;
       cursor: pointer;
     }
+    
   </style>
 </head>
 <body>
+  <!--HTML Logic for NavBar-->
+  <header class="header">
+    <div class="left">
+      <a href="index.html">
+        <img src="assets/logo/Horizontal.png" class="logo" alt="Mathacks Logo">
+      </a>
+    </div>
+    <div class="right">
+      <button class="menu-toggle" id="menu-toggle">☰</button>
+      <nav id="nav">
+        <a href="submit.html">Submit</a>
+        <a href="browse.html">Browse</a>
+        <a href="about.html">About</a>
+        <a href="https://github.com/piyushpalawat99/piyushpalawat99.github.io" target="_blank">Contribute</a>
+      </nav>
+      <button id="toggle-theme">🌓</button>
+    </div>
+  </header>
+
   <main>
     <h1>Submit Your Failed Attempt</h1>
     <form id="attempt-form">
@@ -59,6 +146,16 @@
   </main>
 
   <script>
+ 
+    //Functionality for Toggle theme button
+     const t = document.getElementById('toggle-theme');
+     const b = document.body;
+     if (localStorage.theme === 'dark') b.classList.add('dark');
+     t.onclick = () => {
+      b.classList.toggle('dark');
+      localStorage.theme = b.classList.contains('dark') ? 'dark' : 'light';
+    };
+
     const form = document.getElementById('attempt-form');
     form.addEventListener('submit', async (e) => {
       e.preventDefault();
