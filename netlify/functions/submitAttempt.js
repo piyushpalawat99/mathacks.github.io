@@ -8,12 +8,12 @@ exports.handler = async (event) => {
 
   const AIRTABLE_API_KEY = process.env.AIRTABLE_API_KEY;
   const BASE_ID = 'appKrCFThGJ9SCt4X';
-  //const TABLE_NAME = 'Imported table';
+  const TABLE_NAME = 'Imported table';
 
   const submission = JSON.parse(event.body);
 
   try {
-    const airtableResponse = await fetch(`https://api.airtable.com/v0/${BASE_ID}/tblHHnqSa3rJqsbTD`, {
+    const airtableResponse = await fetch(`https://api.airtable.com/v0/${BASE_ID}/${encodeURIComponent(TABLE_NAME)}`, {
       method: 'POST',
       headers: {
         Authorization: `Bearer ${AIRTABLE_API_KEY}`,
@@ -21,12 +21,12 @@ exports.handler = async (event) => {
       },
       body: JSON.stringify({
         fields: {
-          Title: submission.title,
-          Area: submission.area,
-          Summary: submission.summary,
-          Failure: submission.failure,
-          Author: submission.author,
-          Date: submission.date || new Date().toISOString(),
+          'Title': submission.title,
+          'Area of Research': submission.area,
+          'Attempt Summary': submission.summary,
+          'Why It Failed': submission.failure,
+          'Author Name': submission.author,
+          'Date': submission.date || new Date().toISOString(),
         },
       }),
     });
