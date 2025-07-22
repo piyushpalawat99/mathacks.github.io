@@ -21,12 +21,12 @@ exports.handler = async (event) => {
       },
       body: JSON.stringify({
         fields: {
-          "Title": submission.title,
-          "Area of Research": submission.area,
-          "Summary": submission.summary,
-          "Failure": submission.failure,
-          "Author": submission.author,
-          "Date": submission.date || new Date().toISOString(),
+          Title: submission.title,
+          Area: submission.area,
+          Summary: submission.summary,
+          Failure: submission.failure,
+          Author: submission.author,
+          Date: submission.date || new Date().toISOString(),
         },
       }),
     });
