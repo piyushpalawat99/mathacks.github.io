@@ -4,9 +4,9 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Submit an Attempt – Mathacks</title>
-   <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="style.css" />
   <style>
-   .menu-toggle {
+    .menu-toggle {
       display: none;
       background: none;
       border: none;
@@ -34,14 +34,13 @@
     }
     iframe {
       width: 100%;
-      height: 400px;
+      height: 1200px;
       border: none;
     }
-    
   </style>
 </head>
 <body>
-  <!--HTML Logic for NavBar-->
+  <!-- Navbar -->
   <header class="header">
     <div class="left">
       <a href="index.html">
@@ -60,73 +59,42 @@
     </div>
   </header>
 
+  <!-- Airtable Embedded Form -->
   <main>
     <h1>Submit Your Failed Attempt</h1>
-    <form id="attempt-form">
-      <label>Title
-        <input type="text" name="title" required />
-      </label>
-      <label>Area of Research
-        <input type="text" name="area" required />
-      </label>
-      <label>Attempt Summary
-        <textarea name="summary" required></textarea>
-      </label>
-      <label>Why It Failed
-        <textarea name="failure" required></textarea>
-      </label>
-      <label>Author Name
-        <input type="text" name="author" required />
-      </label>
-      <button type="submit">Submit</button>
-    </form>
+    <iframe
+      id="airtable-form"
+      class="airtable-embed"
+      src="https://airtable.com/embed/pagfVEONHC8tgY0wt?backgroundColor=gray"
+      frameborder="0"
+      onmousewheel=""
+    ></iframe>
   </main>
 
+  <!-- Dark mode and redirect logic -->
   <script>
- 
-    //Functionality for Toggle theme button
-     const t = document.getElementById('toggle-theme');
-     const b = document.body;
-     if (localStorage.theme === 'dark') b.classList.add('dark');
-     t.onclick = () => {
+    // Theme toggle
+    const t = document.getElementById('toggle-theme');
+    const b = document.body;
+    if (localStorage.theme === 'dark') b.classList.add('dark');
+    t.onclick = () => {
       b.classList.toggle('dark');
       localStorage.theme = b.classList.contains('dark') ? 'dark' : 'light';
     };
 
-    const form = document.getElementById('attempt-form');
-    form.addEventListener('submit', async (e) => {
-      e.preventDefault();
-
-      const data = {
-        title: form.title.value,
-        area: form.area.value,
-        summary: form.summary.value,
-        failure: form.failure.value,
-        author: form.author.value,
-        date: new Date().toISOString()
-      };
-
-      try {
-        const res = await fetch('/.netlify/functions/submitAttempt', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify(data)
-        });
-
-        const result = await res.json();
-        if (res.ok) {
-          window.location.href = '/confirmation.html';
-        } else {
-          console.error(result);
-          alert('❌ Failed to save submission.');
-        }
-      } catch (err) {
-        console.error(err);
-        alert('❌ Submission error.');
+    // Airtable submission redirect workaround
+    window.addEventListener("message", function(event) {
+      if (event.origin.includes("airtable.com") && event.data?.type === "form-submission") {
+        window.location.href = "/confirmation.html";
       }
     });
+
+    // Mobile nav toggle
+    const menuToggle = document.getElementById('menu-toggle');
+    const nav = document.getElementById('nav');
+    menuToggle.onclick = () => {
+      nav.classList.toggle('active');
+    };
   </script>
 </body>
 </html>
