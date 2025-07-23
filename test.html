@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Test Submission</title>
+</head>
+<body>
+  <h1>Test Mathacks Submission</h1>
+  <form id="submissionForm">
+    <input type="text" name="title" placeholder="Title" required><br>
+    <input type="text" name="area" placeholder="Area of Research" required><br>
+    <textarea name="summary" placeholder="Attempt Summary" required></textarea><br>
+    <textarea name="failure" placeholder="Why It Failed" required></textarea><br>
+    <input type="text" name="author" placeholder="Author Name" required><br>
+    <button type="submit">Submit</button>
+  </form>
+  <pre id="result"></pre>
+
+  <script>
+    document.getElementById("submissionForm").onsubmit = async (e) => {
+      e.preventDefault();
+      const data = Object.fromEntries(new FormData(e.target).entries());
+      const res = await fetch("/.netlify/functions/submitAttempt", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data),
+      });
+      const text = await res.text();
+      document.getElementById("result").textContent = text;
+    };
+  </script>
+</body>
+</html>
